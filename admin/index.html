@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07345b">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Administración | Del Salado Noticias</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <script src="/rich-text.js?v=2" defer></script>
+    <script src="/admin/admin.js" defer></script>
+  </head>
+  <body>
+    <main class="admin-shell">
+      <section class="login-card" id="login-view" aria-labelledby="login-title" hidden>
+        <a class="login-brand" href="/" aria-label="Volver al sitio">
+          <img class="brand-symbol" src="/assets/LogoDSNsolo.png" alt="">
+          <span class="brand-copy"><img class="brand-wordmark" src="/assets/LogoDSNletras.png" alt="Del Salado Noticias"></span>
+        </a>
+        <h1 id="login-title">Ingresar al CMS</h1>
+        <p class="muted">Usá tu cuenta de administración para gestionar noticias.</p>
+        <form id="login-form">
+          <label for="login-username">Usuario o correo</label>
+          <input id="login-username" name="username" autocomplete="username" required maxlength="254">
+          <label for="login-password">Contraseña</label>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" required maxlength="1024">
+          <p class="form-error" id="login-error" role="alert" hidden></p>
+          <button class="button button-primary button-wide" type="submit">Ingresar</button>
+        </form>
+        <a class="back-link" href="/">← Volver al sitio</a>
+      </section>
+
+      <section class="dashboard" id="dashboard-view" hidden>
+        <header class="admin-header">
+          <a class="admin-brand" href="/" aria-label="Volver al sitio">
+            <img class="brand-symbol" src="/assets/LogoDSNsolo.png" alt="">
+            <span class="brand-copy"><img class="brand-wordmark" src="/assets/LogoDSNletras.png" alt="Del Salado Noticias"></span>
+          </a>
+          <div class="account-menu">
+            <span id="account-label"></span>
+            <button class="button button-quiet" id="logout-button" type="button">Cerrar sesión</button>
+          </div>
+        </header>
+
+        <div class="dashboard-content">
+          <div class="page-heading">
+            <div><span class="eyebrow">Panel de control</span><h1>Noticias</h1><p>Creá y administrá el contenido del sitio.</p></div>
+            <button class="button button-primary" id="new-article-button" type="button">+ Nueva noticia</button>
+            <button class="button button-primary" id="new-ad-button" type="button" hidden>+ Nueva publicidad</button>
+            <button class="button button-primary" id="new-user-button" type="button" hidden>+ Nuevo usuario</button>
+          </div>
+
+          <nav class="admin-tabs" aria-label="Secciones de administración">
+            <button class="admin-tab is-active" id="articles-tab" type="button" aria-pressed="true">Noticias</button>
+            <button class="admin-tab" id="ads-tab" type="button" aria-pressed="false" hidden>Publicidad</button>
+            <button class="admin-tab" id="users-tab" type="button" aria-pressed="false" hidden>Usuarios</button>
+          </nav>
+          <p class="notice" id="dashboard-notice" role="status" hidden></p>
+
+          <div id="articles-management">
+          <section class="article-editor" id="editor-panel" aria-labelledby="editor-title" hidden>
+            <div class="editor-heading">
+              <div><span class="eyebrow">Editor</span><h2 id="editor-title">Nueva noticia</h2></div>
+              <button class="icon-button" id="close-editor-button" type="button" aria-label="Cerrar editor">×</button>
+            </div>
+            <form id="article-form">
+              <input id="article-id" type="hidden">
+              <div class="form-grid">
+                <div class="field field-full">
+                  <label for="article-title">Título <span class="required">*</span></label>
+                  <input id="article-title" name="title" maxlength="220" required>
+                </div>
+                <div class="field field-full">
+                  <label for="article-slug">Dirección amigable (slug)</label>
+                  <input id="article-slug" name="slug" maxlength="240" pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="Se genera automáticamente desde el título">
+                </div>
+                <div class="field">
+                  <label for="article-category">Categoría <span class="required">*</span></label>
+                  <select id="article-category" name="category" required></select>
+                </div>
+                <div class="field">
+                  <label for="article-status">Estado</label>
+                  <select id="article-status" name="status">
+                    <option value="draft">Borrador</option>
+                    <option value="published">Publicada</option>
+                    <option value="scheduled">Programada</option>
+                    <option value="archived">Archivada</option>
+                  </select>
+                </div>
+                <div class="field field-full" id="schedule-field" hidden>
+                  <label for="article-published-at">Publicar el <span class="required">*</span></label>
+                  <input id="article-published-at" name="published_at" type="datetime-local">
+                  <small>La fecha se guarda en UTC y se muestra según el horario de tu dispositivo.</small>
+                </div>
+                <div class="field field-full">
+                  <label for="article-summary">Resumen</label>
+                  <textarea id="article-summary" name="summary" rows="3" maxlength="500"></textarea>
+                  <small>Hasta 500 caracteres.</small>
+                </div>
+                <div class="field field-full">
+                  <label id="article-body-label">Contenido <span class="required">*</span></label>
+                  <div class="rich-text-toolbar" role="toolbar" aria-label="Formato del contenido">
+                    <button type="button" data-editor-command="bold" aria-label="Negrita" title="Negrita"><strong>B</strong></button>
+                    <button type="button" data-editor-command="italic" aria-label="Cursiva" title="Cursiva"><em>I</em></button>
+                    <button type="button" data-editor-command="underline" aria-label="Subrayado" title="Subrayado"><u>U</u></button>
+                    <span class="toolbar-divider" aria-hidden="true"></span>
+                    <button type="button" data-editor-command="formatBlock" data-editor-value="h2" aria-label="Título" title="Título">H2</button>
+                    <button type="button" data-editor-command="formatBlock" data-editor-value="h3" aria-label="Subtítulo" title="Subtítulo">H3</button>
+                    <span class="toolbar-divider" aria-hidden="true"></span>
+                    <button type="button" data-editor-command="insertUnorderedList" aria-label="Lista con viñetas" title="Lista con viñetas">• Lista</button>
+                    <button type="button" data-editor-command="insertOrderedList" aria-label="Lista numerada" title="Lista numerada">1. Lista</button>
+                    <button type="button" data-editor-command="formatBlock" data-editor-value="blockquote" aria-label="Cita" title="Cita">“ ”</button>
+                    <button type="button" data-editor-command="createLink" aria-label="Insertar enlace" title="Insertar enlace">Enlace</button>
+                    <button type="button" data-editor-command="removeFormat" aria-label="Quitar formato" title="Quitar formato">Limpiar</button>
+                  </div>
+                  <div id="article-body-editor" class="rich-text-editor" contenteditable="true" role="textbox" aria-labelledby="article-body-label" aria-multiline="true" aria-required="true"></div>
+                  <small>Usá la barra para aplicar formato al texto. Podés pegar o escribir contenido directamente.</small>
+                </div>
+                <div class="field field-full">
+                  <label for="article-image">Imagen principal</label>
+                  <div class="image-picker">
+                    <img id="image-preview" alt="" hidden>
+                    <div class="image-picker-controls">
+                      <select id="article-image" name="featured_media_id">
+                        <option value="">Sin imagen</option>
+                      </select>
+                      <button class="button button-secondary" id="upload-image-button" type="button">Subir imagen</button>
+                      <input id="image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+                    </div>
+                  </div>
+                  <label for="image-alt-text">Texto alternativo de la imagen</label>
+                  <input id="image-alt-text" name="image_alt" maxlength="255" placeholder="Descripción de la imagen para accesibilidad">
+                  <small>Se guarda junto con la imagen y describe su contenido para lectores de pantalla. JPG, PNG, WebP o GIF; máximo 5 MB.</small>
+                </div>
+                <section class="gallery-picker field-full" aria-labelledby="gallery-picker-title">
+                  <div class="gallery-picker-heading">
+                    <div>
+                      <h3 id="gallery-picker-title">Galería de la noticia</h3>
+                      <p>Se muestran solo las imágenes asociadas a esta noticia. Podés quitar las que no correspondan o agregar nuevas.</p>
+                    </div>
+                    <span class="gallery-selection-count" id="gallery-selection-count">0 / 20</span>
+                  </div>
+                  <div id="article-gallery-list" class="gallery-media-list"></div>
+                  <button class="button button-secondary gallery-upload-button" id="upload-gallery-images-button" type="button">+ Agregar imágenes</button>
+                  <input id="gallery-image-files" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+                  <small>Podés seleccionar varias al mismo tiempo. Se permiten hasta 20 imágenes adicionales.</small>
+                </section>
+                <label class="checkbox-field field-full" for="article-featured">
+                  <input id="article-featured" name="is_featured" type="checkbox">
+                  <span>Incluir en noticias destacadas</span>
+                </label>
+              </div>
+              <p class="form-error" id="article-error" role="alert" hidden></p>
+              <div class="form-actions">
+                <button class="button button-quiet" id="cancel-editor-button" type="button">Cancelar</button>
+                <button class="button button-secondary" id="save-draft-button" type="button">Guardar borrador</button>
+                <button class="button button-primary" id="save-article-button" type="submit">Guardar noticia</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="article-list-panel" aria-labelledby="article-list-title">
+            <div class="list-heading">
+              <div><h2 id="article-list-title">Todas las noticias</h2><p id="article-count" class="muted"></p></div>
+              <label class="filter-field" for="status-filter"><span>Filtrar</span>
+                <select id="status-filter">
+                  <option value="">Todos los estados</option>
+                  <option value="draft">Borradores</option>
+                  <option value="published">Publicadas</option>
+                  <option value="scheduled">Programadas</option>
+                  <option value="archived">Archivadas</option>
+                </select>
+              </label>
+            </div>
+            <div id="article-list" class="article-list" aria-live="polite"></div>
+          </section>
+          </div>
+
+          <section id="users-management" hidden>
+            <section class="article-editor" id="user-editor-panel" aria-labelledby="user-editor-title" hidden>
+              <div class="editor-heading">
+                <div><span class="eyebrow">Administración</span><h2 id="user-editor-title">Nuevo usuario</h2></div>
+                <button class="icon-button" id="close-user-editor-button" type="button" aria-label="Cerrar formulario">×</button>
+              </div>
+              <form id="user-form">
+                <input id="user-id" type="hidden">
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="user-username">Nombre de usuario <span class="required">*</span></label>
+                    <input id="user-username" name="username" required minlength="3" maxlength="50" pattern="[a-zA-Z0-9_.-]+">
+                  </div>
+                  <div class="field">
+                    <label for="user-email">Correo electrónico <span class="required">*</span></label>
+                    <input id="user-email" name="email" type="email" required maxlength="254" autocomplete="email">
+                  </div>
+                  <div class="field">
+                    <label for="user-role">Rol <span class="required">*</span></label>
+                    <select id="user-role" name="role" required>
+                      <option value="author">Autor</option>
+                      <option value="editor">Editor</option>
+                      <option value="admin">Administrador</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="user-password">Contraseña <span class="required" id="password-required">*</span></label>
+                    <input id="user-password" name="password" type="password" minlength="12" maxlength="1024" autocomplete="new-password">
+                    <small id="password-help">Mínimo 12 caracteres. No se muestra ni se recupera después de crearla.</small>
+                  </div>
+                  <label class="checkbox-field field-full" id="user-active-field" for="user-active" hidden>
+                    <input id="user-active" name="is_active" type="checkbox" checked>
+                    <span>Usuario activo</span>
+                  </label>
+                </div>
+                <p class="form-error" id="user-error" role="alert" hidden></p>
+                <div class="form-actions">
+                  <button class="button button-quiet" id="cancel-user-editor-button" type="button">Cancelar</button>
+                  <button class="button button-primary" id="save-user-button" type="submit">Crear usuario</button>
+                </div>
+              </form>
+            </section>
+            <section class="article-list-panel" aria-labelledby="user-list-title">
+              <div class="list-heading">
+                <div><h2 id="user-list-title">Usuarios</h2><p id="user-count" class="muted"></p></div>
+              </div>
+              <div id="user-list" class="article-list" aria-live="polite"></div>
+            </section>
+          </section>
+
+          <section id="ads-management" hidden>
+            <section class="article-editor" id="ad-editor-panel" aria-labelledby="ad-editor-title" hidden>
+              <div class="editor-heading">
+                <div><span class="eyebrow">Campaña</span><h2 id="ad-editor-title">Nueva publicidad</h2></div>
+                <button class="icon-button" id="close-ad-editor-button" type="button" aria-label="Cerrar formulario">×</button>
+              </div>
+              <form id="ad-form">
+                <input id="ad-id" type="hidden">
+                <div class="form-grid">
+                  <div class="field field-full">
+                    <label for="ad-title">Nombre interno <span class="required">*</span></label>
+                    <input id="ad-title" maxlength="160" required>
+                  </div>
+                  <div class="field">
+                    <label for="ad-placement">Ubicación <span class="required">*</span></label>
+                    <select id="ad-placement" required>
+                      <option value="home_banner">Banner de portada</option>
+                      <option value="article_banner">Banner dentro de las notas</option>
+                      <option value="article_sidebar">Banner vertical al costado de las notas</option>
+                    </select>
+                  </div>
+                  <div class="field field-full">
+                    <label for="ad-library-image">Elegir imagen de la biblioteca</label>
+                    <select id="ad-library-image">
+                      <option value="">No elegir de la biblioteca</option>
+                    </select>
+                    <small>También podés usar una imagen que ya esté en /assets.</small>
+                  </div>
+                  <div class="field field-full">
+                    <label for="ad-image-path">Ruta de imagen <span class="required">*</span></label>
+                    <input id="ad-image-path" maxlength="500" placeholder="/assets/uploads/imagen.jpg" required>
+                    <div class="ad-image-preview-wrap">
+                      <img id="ad-image-preview" alt="" hidden>
+                      <button class="button button-secondary" id="upload-ad-image-button" type="button">Subir imagen</button>
+                      <input id="ad-image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+                    </div>
+                    <small id="ad-image-help">Banner horizontal: proporción aproximada 7,6:1 (por ejemplo, 1144 × 150 px). JPG, PNG, WebP o GIF; máximo 5 MB.</small>
+                  </div>
+                  <div class="field field-full">
+                    <label for="ad-target-url">Enlace de destino <span class="required">*</span></label>
+                    <input id="ad-target-url" maxlength="2048" placeholder="https:// o /index.html?categoria=locales" required>
+                    <small>Se admiten enlaces HTTPS o rutas internas del sitio.</small>
+                  </div>
+                  <div class="field field-full">
+                    <label for="ad-alt-text">Texto alternativo</label>
+                    <input id="ad-alt-text" maxlength="255" placeholder="Descripción breve de la publicidad">
+                  </div>
+                  <div class="field">
+                    <label for="ad-starts-at">Mostrar desde <span class="required">*</span></label>
+                    <input id="ad-starts-at" type="datetime-local" required>
+                  </div>
+                  <div class="field">
+                    <label for="ad-ends-at">Dejar de mostrar</label>
+                    <input id="ad-ends-at" type="datetime-local">
+                    <small>Dejalo vacío para que no tenga fecha de finalización.</small>
+                  </div>
+                  <label class="checkbox-field field-full" for="ad-active">
+                    <input id="ad-active" type="checkbox" checked>
+                    <span>Publicidad activa</span>
+                  </label>
+                </div>
+                <p class="form-error" id="ad-error" role="alert" hidden></p>
+                <div class="form-actions">
+                  <button class="button button-quiet" id="cancel-ad-editor-button" type="button">Cancelar</button>
+                  <button class="button button-primary" id="save-ad-button" type="submit">Guardar publicidad</button>
+                </div>
+              </form>
+            </section>
+            <section class="article-list-panel" aria-labelledby="ad-list-title">
+              <div class="list-heading">
+                <div><h2 id="ad-list-title">Todas las publicidades</h2><p id="ad-count" class="muted"></p></div>
+              </div>
+              <div id="ad-list" class="article-list" aria-live="polite"></div>
+            </section>
+          </section>
+        </div>
+      </section>
+      <div class="toast" id="toast" role="status" hidden></div>
+    </main>
+  </body>
+</html>

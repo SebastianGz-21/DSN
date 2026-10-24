@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07345b">
+    <meta name="description" content="Noticias locales y actualidad de Del Salado, Figueroa y la región.">
+    <title>Del Salado Noticias | La región que nos une</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=24">
+    <script src="rich-text.js?v=2" defer></script>
+    <script src="app.js?v=27" defer></script>
+  </head>
+  <body>
+    <div class="utility-bar">
+      <div class="site-width utility-inner">
+        <time id="current-date-time" datetime=""></time>
+        <div class="utility-links"><a href="#nosotros">Quiénes somos</a><a href="mailto:delsaladonoticias@gmail.com">Contacto</a><a class="social-icon" aria-label="Facebook" href="https://www.facebook.com/profile.php?id=61595867696050" target="_blank" rel="noopener noreferrer"><img src="assets/icons/facebook.svg" alt=""></a><a class="social-icon" aria-label="Instagram" href="https://www.instagram.com/delsaladonoticias/" target="_blank" rel="noopener noreferrer"><img src="assets/icons/instagram.svg" alt=""></a><span class="social-icon" role="img" aria-label="WhatsApp" title="WhatsApp"><img src="assets/icons/whatsapp.svg" alt=""></span></div>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="site-width header-inner">
+        <a class="brand" href="index.html" aria-label="Del Salado Noticias, inicio">
+          <img class="brand-symbol" src="assets/LogoDSNsolo.png" alt="">
+          <img class="brand-wordmark" src="assets/LogoDSNletras.png" alt="">
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menú <span>☰</span></button>
+        <nav class="primary-nav" id="primary-nav" aria-label="Secciones">
+          <a class="active" href="index.html">Inicio</a>
+          <a data-category="locales" href="index.html?categoria=locales">Locales</a>
+          <a data-category="figueroa" href="index.html?categoria=figueroa">Departamento Figueroa</a>
+          <a data-category="capital-banda" href="index.html?categoria=capital-banda">Capital y Banda</a>
+          <a data-category="politica" href="index.html?categoria=politica">Política</a>
+          <a data-category="policiales" href="index.html?categoria=policiales">Policiales</a>
+          <a data-category="sociedad" href="index.html?categoria=sociedad">Sociedad</a>
+          <a data-category="deportes" href="index.html?categoria=deportes">Deportes</a>
+          <button class="search-button" type="button" aria-label="Buscar noticias" title="Buscar noticias">⌕</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-width">
+      <section class="home-view" aria-label="Portada">
+        <section class="home-grid" aria-label="Noticias principales">
+          <div class="main-column">
+            <article class="hero-story" id="home-hero" role="region" aria-label="Noticias destacadas" aria-roledescription="carrusel">
+              <img src="assets/quienes-somos.png" alt="Paisaje del río Salado en Santiago del Estero">
+              <div class="hero-shade"></div>
+              <div class="hero-content">
+                <span class="category-tag">Actualidad</span>
+                <h1><a class="hero-title-link" href="index.html">Cargando noticias…</a></h1>
+              </div>
+              <div class="slider-dots" role="group" aria-label="Elegir noticia destacada"></div>
+            </article>
+
+            <section class="featured-section">
+              <div class="section-heading"><h2>Noticias destacadas</h2><a href="index.html?vista=destacadas">Más <span>→</span></a></div>
+              <div class="featured-grid" id="featured-grid"><p class="feed-state">Cargando noticias destacadas…</p></div>
+            </section>
+            <div class="social-media-banner" role="group" aria-label="Seguinos en redes sociales">
+              <img src="assets/social-media-banner.png?v=2" alt="Del Salado Noticias: No te pierdas de nada. Seguí nuestras redes sociales.">
+              <a class="social-media-banner-link social-media-banner-facebook" href="https://www.facebook.com/profile.php?id=61595867696050" target="_blank" rel="noopener noreferrer" aria-label="Seguir a Del Salado Noticias en Facebook"></a>
+              <a class="social-media-banner-link social-media-banner-instagram" href="https://www.instagram.com/delsaladonoticias/" target="_blank" rel="noopener noreferrer" aria-label="Seguir a Del Salado Noticias en Instagram"></a>
+            </div>
+          </div>
+
+          <aside class="sidebar">
+            <section class="weather-widget" id="weather-widget" aria-labelledby="weather-title" aria-live="polite">
+              <div class="weather-heading">
+                <div><span class="eyebrow">Pronóstico del tiempo</span><h2 id="weather-title">Santiago del Estero</h2></div>
+                <span class="weather-updated" id="weather-updated">Actualizando…</span>
+              </div>
+              <div class="weather-current" id="weather-current"><p class="weather-state">Cargando el pronóstico…</p></div>
+              <div class="weather-forecast" id="weather-forecast" aria-label="Pronóstico para los próximos días"></div>
+            </section>
+            <section class="latest-panel">
+              <div class="section-heading"><h2>Últimas noticias</h2><a href="index.html?vista=ultimas">Más <span>→</span></a></div>
+              <div id="latest-list"><p class="feed-state">Cargando últimas noticias…</p></div>
+            </section>
+            <a class="department-promo" href="index.html?categoria=figueroa">
+              <img src="assets/quienes-somos.png" alt="Paisaje del río Salado en Santiago del Estero">
+              <span class="promo-shade"></span>
+              <strong>Departamento Figueroa</strong>
+              <span class="promo-description">Una sección especial, con toda la información del departamento.</span>
+              <span class="button-light">Ver noticias <b>→</b></span>
+            </a>
+          </aside>
+        </section>
+      </section>
+      <section class="public-ad-slot" id="home-ad-slot" aria-label="Publicidad" hidden></section>
+
+      <section class="category-view interior-main" hidden>
+        <div class="page-title-row">
+          <div><h1 id="category-title">Noticias</h1><p>Lo que pasa en nuestra región, contado de cerca.</p></div>
+          <form class="search-inline" role="search" action="index.html">
+            <label class="sr-only" for="news-search">Buscar noticias</label>
+            <input id="news-search" type="search" name="q" value="" placeholder="Buscar noticias">
+            <input id="news-search-category" type="hidden" name="categoria" value="">
+            <button type="submit" aria-label="Buscar">⌕</button>
+          </form>
+        </div>
+        <p class="ranking-note" hidden>Selección editorial mientras se conecta el conteo de visualizaciones.</p>
+        <div class="listing-layout">
+          <section class="news-list" aria-label="Listado de noticias">
+          <p class="empty-state" hidden></p>
+          </section>
+          <aside class="listing-aside">
+            <div class="aside-card"><span class="eyebrow">En esta edición</span><h2>Las noticias que importan a nuestra gente.</h2><p>Información local, historias y actualidad de toda la región del Salado.</p><a href="index.html?categoria=figueroa">Explorar Figueroa <span>→</span></a></div>
+            <a class="aside-image" href="index.html?categoria=figueroa"><img src="assets/quienes-somos.png" alt="Paisaje del río Salado en Santiago del Estero"><span>Departamento Figueroa<br><b>Conocé la sección →</b></span></a>
+            <div class="category-ad-slot" id="category-ad-slot" aria-label="Publicidad" hidden></div>
+          </aside>
+        </div>
+      </section>
+      <section class="article-detail interior-main" id="article-detail" hidden aria-live="polite"></section>
+      <section class="about-panel" id="nosotros" aria-label="Quiénes somos">
+        <div class="section-heading"><h2>Quiénes somos</h2></div>
+        <div class="about-content">
+          <div class="about-copy">
+            <p>Somos un medio de comunicación que nace en el corazón del interior santiagueño con el objetivo de contar lo que pasa en las localidades ubicadas a la vera del río y la historia de nuestros pueblos.</p>
+            <p>Buscamos poner foco en las principales ciudades, localidades y parajes de los ocho departamentos que atraviesa el Salado en Santiago del Estero.</p>
+            <p>Contamos las noticias que importan a este sector de la comunidad santiagueña: inauguraciones, obras, acciones sociales, culturales, deportivas y recreativas; fiestas patronales, entre otras cosas.</p>
+            <p>Somos un portal que cree en un periodismo de cercanía, con la información chequeada y con respeto por nuestra gente.</p>
+            <p><strong>Del Salado Noticias es tu lugar.</strong></p>
+          </div>
+          <img class="about-image" src="assets/quienes-somos.png" alt="Paisaje del río Salado rodeado de vegetación en Santiago del Estero">
+        </div>
+      </section>
+      <section class="newsletter-strip">
+        <div><span class="eyebrow">El Salado, todos los días</span><h2>La información que nos une.</h2></div>
+        <a class="button-primary" href="#suscripcion">Recibir noticias <span>→</span></a>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="contacto">
+      <div class="site-width footer-main">
+        <a class="brand brand-light" href="index.html" aria-label="Del Salado Noticias, inicio"><img class="brand-symbol" src="assets/LogoDSNsolo.png" alt=""><img class="brand-wordmark" src="assets/LogoDSNletras.png" alt=""></a>
+        <p class="footer-manifesto">Información real, cercana y<br>desde la región del río Salado.</p>
+        <div class="footer-column"><h2>Secciones</h2><a href="index.html">Inicio</a><a href="index.html?categoria=locales">Locales</a><a href="index.html?categoria=figueroa">Departamento Figueroa</a><a href="index.html?categoria=capital-banda">Capital y Banda</a><a href="index.html?categoria=politica">Política</a><a href="index.html?categoria=policiales">Policiales</a><a href="index.html?categoria=sociedad">Sociedad</a><a href="index.html?categoria=deportes">Deportes</a></div>
+        <div class="footer-column"><h2>Enlaces útiles</h2><a href="#nosotros">Quiénes somos</a><a href="#contacto">Contacto</a><a href="#publicidad">Publicidad</a></div>
+        <form class="footer-subscribe" id="suscripcion"><h2>Suscribite</h2><p>Recibí las últimas noticias en tu correo.</p><label class="sr-only" for="email">Tu correo electrónico</label><input id="email" type="email" placeholder="Tu correo electrónico" required><button type="submit">Suscribirme</button><span class="form-message" aria-live="polite"></span></form>
+      </div>
+      <div class="site-width footer-bottom"><span>© 2025 Del Salado Noticias. Todos los derechos reservados.</span><span>Hecho desde la región del Salado.</span></div>
+    </footer>
+  </body>
+</html>

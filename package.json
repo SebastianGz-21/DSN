@@ -1,0 +1,26 @@
+{
+  "name": "del-salado-noticias",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio y backend local para el CMS de Del Salado Noticias",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "create-admin": "node scripts/create-admin.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "express-session": "^1.18.2",
+    "helmet": "^8.1.0",
+    "multer": "^2.4.0",
+    "mysql2": "^3.24.5",
+    "sanitize-html": "^2.18.1"
+  }
+}
