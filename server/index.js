@@ -110,10 +110,12 @@ app.use((error, _req, res, _next) => {
   return res.status(500).json({ error: "Ocurrió un error interno. Revisá los registros del servidor." });
 });
 
-async function start() {
-  await pool.query("SELECT 1");
+function start() {
   const server = app.listen(config.port, config.host, () => {
     console.log(`Servidor disponible en ${config.host}:${config.port}`);
+    pool.query("SELECT 1")
+      .then(() => console.log("Conexión con MySQL establecida."))
+      .catch((error) => console.error("No se pudo conectar con MySQL:", error.message));
   });
 
   const shutdown = (signal) => {
@@ -128,7 +130,4 @@ async function start() {
   process.once("SIGTERM", () => shutdown("SIGTERM"));
 }
 
-start().catch((error) => {
-  console.error("No se pudo iniciar el backend local:", error.message);
-  process.exitCode = 1;
-});
+start();
