@@ -88,7 +88,7 @@ app.use("/api/admin/media", createMediaRouter(
   express,
   pool,
   requireAuth,
-  path.join(projectRoot, "assets", "uploads"),
+  config.mediaUploadDirectory,
 ));
 app.use("/api/admin/users", createUsersRouter(express, pool, requireAuth));
 app.use("/api", createArticlesRouter(express, pool, requireAuth));
@@ -103,6 +103,7 @@ app.use(createSharePageRouter(express, pool, homePage));
 app.get("/styles.css", (_req, res) => res.sendFile(path.join(projectRoot, "styles.css")));
 app.get("/app.js", (_req, res) => res.sendFile(path.join(projectRoot, "app.js")));
 app.get("/rich-text.js", (_req, res) => res.sendFile(path.join(projectRoot, "rich-text.js")));
+app.use("/assets/uploads", express.static(config.mediaUploadDirectory, { dotfiles: "deny", index: false }));
 app.use("/assets", express.static(path.join(projectRoot, "assets"), { dotfiles: "deny", index: false }));
 
 app.use("/api", (_req, res) => res.status(404).json({ error: "El endpoint solicitado no existe." }));

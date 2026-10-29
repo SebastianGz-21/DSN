@@ -1,5 +1,7 @@
 const path = require("node:path");
+const os = require("node:os");
 const dotenv = require("dotenv");
+const { resolveMediaUploadDirectory } = require("./media-storage");
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
@@ -43,12 +45,19 @@ const trustProxy = proxyHopCount(process.env.TRUST_PROXY);
 if (environment === "production" && trustProxy === 0) {
   throw new Error("En producción, configurá TRUST_PROXY con la cantidad de proxies confiables del hosting.");
 }
+const mediaUploadDirectory = resolveMediaUploadDirectory({
+  environment,
+  projectRoot: path.resolve(__dirname, ".."),
+  homeDirectory: os.homedir(),
+  configuredDirectory: process.env.MEDIA_UPLOAD_DIR?.trim(),
+});
 
 module.exports = Object.freeze({
   environment,
   port: positiveInteger("PORT", "3000"),
   host: process.env.HOST?.trim() || (environment === "production" ? "0.0.0.0" : "127.0.0.1"),
   trustProxy,
+  mediaUploadDirectory,
   sessionSecret,
   mysql: Object.freeze({
     host: process.env.MYSQL_HOST || "localhost",

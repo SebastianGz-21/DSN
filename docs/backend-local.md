@@ -47,10 +47,13 @@ En una aplicación Node.js de Hostinger, configurá las variables de entorno des
 - `TRUST_PROXY`: la cantidad de proxies inversos confiables entre el visitante y Node.js. En un despliegue con un único proxy, configurá `1`; confirmá el valor con Hostinger y no uses una confianza ilimitada.
 - `SESSION_SECRET`: un secreto aleatorio propio de producción de al menos 32 caracteres.
 - `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_DATABASE`, `MYSQL_USER` y `MYSQL_PASSWORD`: los datos de la base MySQL de producción.
+- `MEDIA_UPLOAD_DIR` (opcional): ruta absoluta a un directorio persistente para las imágenes subidas. Por defecto, la aplicación usa `dsn-media/uploads` dentro del directorio personal de la cuenta, fuera de las versiones desplegadas.
 
 La aplicación exige `TRUST_PROXY` en producción: Express lo usa para identificar correctamente a los clientes y para que las cookies de sesión seguras funcionen cuando HTTPS termina en el proxy. En desarrollo local queda desactivado por defecto. Si usás un túnel con exactamente un proxy, podés configurar `TRUST_PROXY=1` en tu `.env` local.
 
 Antes de abrir el sitio, hacé una copia de seguridad e importá la base de producción. `database/local-backend.sql` solo crea tablas adicionales del CMS y presupone que ya existen las tablas centrales (`articles`, `users`, `categories` y otras); no es una copia completa de la base. Conservá también las imágenes que estén referenciadas por noticias, galerías o publicidades.
+
+Las imágenes subidas por el CMS se guardan fuera del código desplegado: los enlaces públicos siguen usando `/assets/uploads/...`, pero el servidor sirve esos archivos desde `MEDIA_UPLOAD_DIR`. Esto evita que un despliegue nuevo reemplace las imágenes con el contenido del repositorio. El directorio se crea al subir la primera imagen; comprobá que la cuenta de Node.js pueda escribir en él. Las imágenes faltantes de despliegues anteriores no se recuperan automáticamente y deben volver a subirse.
 
 Después de respaldar la base, ejecutá una vez `database/migrations/20261028-category-update.sql` en Workbench, tanto en la base local como en la de producción. La migración crea las categorías Capital y Banda, reasigna a Locales las noticias que estaban en Policiales y elimina las categorías anteriores Capital y Banda y Policiales. No hay artículos actualmente asignados a la categoría anterior Capital y Banda.
 
@@ -59,7 +62,7 @@ Después de respaldar la base, ejecutá una vez `database/migrations/20261028-ca
 1. Con el servidor local en marcha, abrí `http://127.0.0.1:3000/admin`.
 2. Iniciá sesión con el usuario creado mediante `npm run create-admin`.
 3. Desde el panel podés crear y editar noticias, elegir categoría y estado, programar publicaciones, marcar destacadas, administrar su imagen principal y subir hasta 20 imágenes adicionales para el carrusel del detalle de cada noticia. El contenido incluye una barra para aplicar negrita, cursiva, subrayado, títulos, listas, citas y enlaces.
-4. El botón **Subir imagen** admite JPG, PNG, WebP o GIF de hasta 5 MB. Las imágenes se guardan en `assets/uploads` y quedan registradas en la biblioteca de medios.
+4. El botón **Subir imagen** admite JPG, PNG, WebP o GIF de hasta 5 MB. Las imágenes se guardan en el directorio persistente de medios y quedan registradas en la biblioteca de medios.
 5. Los autores solo pueden administrar sus propios borradores. Los administradores y editores pueden gestionar todos los artículos.
 6. En la pestaña **Usuarios** (solo visible para administradores) podés crear cuentas, editar usuario/correo/rol, cambiar la contraseña y activar o desactivar el acceso. Las contraseñas nuevas deben tener al menos 12 caracteres.
 7. La desactivación conserva las noticias y el historial vinculados a la cuenta, pero bloquea el acceso al CMS. No se permite desactivar al administrador activo que sea el único restante ni desactivar la propia cuenta.
