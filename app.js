@@ -57,9 +57,9 @@ const articleSlug = query.get("noticia");
 const categoryLabels = {
   locales: "Locales",
   figueroa: "Departamento Figueroa",
-  "capital-banda": "Capital y Banda",
+  capital: "Capital",
+  banda: "Banda",
   politica: "Política",
-  policiales: "Policiales",
   sociedad: "Sociedad",
   deportes: "Deportes",
 };

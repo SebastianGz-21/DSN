@@ -52,6 +52,8 @@ La aplicación exige `TRUST_PROXY` en producción: Express lo usa para identific
 
 Antes de abrir el sitio, hacé una copia de seguridad e importá la base de producción. `database/local-backend.sql` solo crea tablas adicionales del CMS y presupone que ya existen las tablas centrales (`articles`, `users`, `categories` y otras); no es una copia completa de la base. Conservá también las imágenes que estén referenciadas por noticias, galerías o publicidades.
 
+Después de respaldar la base, ejecutá una vez `database/migrations/20261028-category-update.sql` en Workbench, tanto en la base local como en la de producción. La migración crea las categorías Capital y Banda, reasigna a Locales las noticias que estaban en Policiales y elimina las categorías anteriores Capital y Banda y Policiales. No hay artículos actualmente asignados a la categoría anterior Capital y Banda.
+
 ## Usar el CMS
 
 1. Con el servidor local en marcha, abrí `http://127.0.0.1:3000/admin`.

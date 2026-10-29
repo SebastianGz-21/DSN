@@ -1,4 +1,5 @@
 const path = require("node:path");
+const fs = require("node:fs");
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const session = require("express-session");
@@ -11,9 +12,11 @@ const { createArticlesRouter } = require("./articles");
 const { createAdsRouter } = require("./ads");
 const { createMediaRouter } = require("./media");
 const { createUsersRouter } = require("./users");
+const { createSharePageRouter } = require("./share-page");
 
 const app = express();
 const projectRoot = path.resolve(__dirname, "..");
+const homePage = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
 const sessionStore = new MySQLSessionStore(pool);
 
 app.disable("x-powered-by");
@@ -96,7 +99,7 @@ app.use("/admin", express.static(path.join(projectRoot, "admin"), {
   index: false,
   setHeaders: (res) => res.setHeader("Cache-Control", "no-store"),
 }));
-app.get(["/", "/index.html"], (_req, res) => res.sendFile(path.join(projectRoot, "index.html")));
+app.use(createSharePageRouter(express, pool, homePage));
 app.get("/styles.css", (_req, res) => res.sendFile(path.join(projectRoot, "styles.css")));
 app.get("/app.js", (_req, res) => res.sendFile(path.join(projectRoot, "app.js")));
 app.get("/rich-text.js", (_req, res) => res.sendFile(path.join(projectRoot, "rich-text.js")));

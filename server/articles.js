@@ -182,12 +182,14 @@ function createArticlesRouter(express, pool, requireAuth) {
     const order = view === "featured"
       ? "a.views_count DESC, a.published_at DESC, a.id DESC"
       : "a.published_at DESC, a.id DESC";
+    const featuredCondition = view === "featured" ? " AND a.is_featured = TRUE" : "";
     values.push(limit);
     const [articles] = await pool.execute(
       `${articleSelect}
        WHERE s.slug = 'published'
          AND a.published_at IS NOT NULL
          AND a.published_at <= UTC_TIMESTAMP()
+         ${featuredCondition}
          ${categoryCondition}
        ORDER BY ${order}
        LIMIT ?`,

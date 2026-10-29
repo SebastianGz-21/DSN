@@ -1,6 +1,45 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { findCategoryAndStatus, sanitizeArticleBody, slugify, validateArticle } = require("./articles");
+const express = require("express");
+const { once } = require("node:events");
+const {
+  createArticlesRouter,
+  findCategoryAndStatus,
+  sanitizeArticleBody,
+  slugify,
+  validateArticle,
+} = require("./articles");
+
+test("featured article view only returns articles manually marked as featured", async (t) => {
+  const featuredArticle = { id: 1, title: "Noticia destacada", is_featured: 1 };
+  const regularArticle = { id: 2, title: "Noticia más vista", is_featured: 0 };
+  const queries = [];
+  const pool = {
+    execute: async (query) => {
+      queries.push(query);
+      const articles = query.includes("AND a.is_featured = TRUE")
+        ? [featuredArticle]
+        : [featuredArticle, regularArticle];
+      return [articles, []];
+    },
+  };
+  const app = express();
+  app.use("/api", createArticlesRouter(express, pool, () => {}));
+  const server = app.listen(0, "127.0.0.1");
+  t.after(() => server.close());
+  await once(server, "listening");
+
+  const baseUrl = `http://127.0.0.1:${server.address().port}/api/articles`;
+  const featuredResponse = await fetch(`${baseUrl}?view=featured`);
+  const featuredResult = await featuredResponse.json();
+  const latestResponse = await fetch(`${baseUrl}?view=latest`);
+  const latestResult = await latestResponse.json();
+
+  assert.deepEqual(featuredResult.articles, [featuredArticle]);
+  assert.deepEqual(latestResult.articles, [featuredArticle, regularArticle]);
+  assert.match(queries[0], /AND a\.is_featured = TRUE/);
+  assert.doesNotMatch(queries[1], /AND a\.is_featured = TRUE/);
+});
 
 test("category and status lookups read the first row from mysql2 query results", async () => {
   const pool = {
