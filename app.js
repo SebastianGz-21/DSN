@@ -619,9 +619,26 @@ async function loadPublicAds() {
 function renderHomeAds() {
   const slot = document.querySelector("#home-ad-slot");
   const homeAds = publicAds.filter((ad) => ad.placement === "home_banner");
+  positionHomeAdSlot(slot);
   slot.replaceChildren(...homeAds.map(makeAdBanner));
   slot.hidden = homeAds.length === 0 || Boolean(articleSlug || category || searchTerm || latestView || featuredView);
 }
+
+const desktopHomeAdMedia = window.matchMedia("(min-width: 701px)");
+
+function positionHomeAdSlot(slot) {
+  const homeView = document.querySelector(".home-view");
+  const hero = document.querySelector("#home-hero");
+  if (desktopHomeAdMedia.matches) {
+    hero.after(slot);
+  } else {
+    homeView.after(slot);
+  }
+}
+
+window.addEventListener("resize", () => {
+  positionHomeAdSlot(document.querySelector("#home-ad-slot"));
+});
 
 function renderCategoryAds() {
   const slot = document.querySelector("#category-ad-slot");
