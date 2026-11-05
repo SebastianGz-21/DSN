@@ -144,6 +144,7 @@ time { display: block; color: #8291a0; font-size: 10px; }
 .ad-label { display: block; padding: 0 0 4px; color: #718293; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .public-ad-banner a, .public-ad-banner img { display: block; width: 100%; }
 .public-ad-banner img { max-height: 190px; aspect-ratio: 7.6 / 1; object-fit: cover; }
+.public-ad-banner-horizontal img { max-height: none; aspect-ratio: 2676 / 604; }
 .article-detail-main .public-ad-banner { margin: 18px 0; }
 .public-ad-banner-vertical { padding: 5px; }
 .public-ad-banner-vertical img { width: 100%; height: auto; max-height: none; aspect-ratio: 3 / 5; background: #fff; object-fit: contain; }

@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#07345b">
     <meta name="robots" content="noindex, nofollow">
     <title>Administración | Del Salado Noticias</title>
-    <link rel="stylesheet" href="/admin/admin.css">
+    <link rel="stylesheet" href="/admin/admin.css?v=2">
     <script src="/rich-text.js?v=2" defer></script>
-    <script src="/admin/admin.js" defer></script>
+    <script src="/admin/admin.js?v=2" defer></script>
   </head>
   <body>
     <main class="admin-shell">
@@ -239,7 +239,7 @@
                     <label for="ad-title">Nombre interno <span class="required">*</span></label>
                     <input id="ad-title" maxlength="160" required>
                   </div>
-                  <div class="field">
+                  <div class="field field-full ad-placement-field">
                     <label for="ad-placement">Ubicación <span class="required">*</span></label>
                     <select id="ad-placement" required>
                       <option value="home_banner">Banner de portada</option>
@@ -247,13 +247,12 @@
                       <option value="article_sidebar">Banner vertical al costado de las notas</option>
                     </select>
                   </div>
-                  <div class="field field-full">
-                    <label for="ad-library-image">Elegir imagen de la biblioteca</label>
-                    <select id="ad-library-image">
-                      <option value="">No elegir de la biblioteca</option>
-                    </select>
-                    <small>También podés usar una imagen que ya esté en /assets.</small>
-                  </div>
+                  <input id="ad-library-image" type="hidden">
+                  <details class="field field-full ad-library-picker">
+                    <summary>Elegir imagen de la biblioteca</summary>
+                    <div class="ad-library-grid" id="ad-library-list" role="group" aria-label="Imágenes de la biblioteca"></div>
+                    <small>Elegí una miniatura para usarla. También podés usar una imagen que ya esté en /assets.</small>
+                  </details>
                   <div class="field field-full">
                     <label for="ad-image-path">Ruta de imagen <span class="required">*</span></label>
                     <input id="ad-image-path" maxlength="500" placeholder="/assets/uploads/imagen.jpg" required>
@@ -262,7 +261,7 @@
                       <button class="button button-secondary" id="upload-ad-image-button" type="button">Subir imagen</button>
                       <input id="ad-image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
                     </div>
-                    <small id="ad-image-help">Banner horizontal: proporción aproximada 7,6:1 (por ejemplo, 1144 × 150 px). JPG, PNG, WebP o GIF; máximo 5 MB.</small>
+                    <small id="ad-image-help">Banner horizontal: misma proporción que la imagen de redes sociales, 2676 × 604 px (aprox. 4,43:1). JPG, PNG, WebP o GIF; máximo 5 MB.</small>
                   </div>
                   <div class="field field-full">
                     <label for="ad-target-url">Enlace de destino <span class="required">*</span></label>

@@ -32,6 +32,7 @@ const adImagePath = document.querySelector("#ad-image-path");
 const adImagePreview = document.querySelector("#ad-image-preview");
 const adImageFileInput = document.querySelector("#ad-image-file");
 const adLibraryImage = document.querySelector("#ad-library-image");
+const adLibraryList = document.querySelector("#ad-library-list");
 
 let currentUser = null;
 let articles = [];
@@ -210,39 +211,64 @@ function showManagementSection(section) {
 }
 
 function populateAdMedia() {
-  adLibraryImage.replaceChildren();
-  const noImage = document.createElement("option");
-  noImage.value = "";
-  noImage.textContent = "No elegir de la biblioteca";
-  adLibraryImage.append(noImage);
-  for (const media of mediaItems) {
-    const option = document.createElement("option");
-    option.value = String(media.id);
-    option.textContent = media.original_filename;
-    adLibraryImage.append(option);
+  adLibraryList.replaceChildren();
+  if (!mediaItems.length) {
+    const empty = document.createElement("p");
+    empty.className = "ad-library-empty";
+    empty.textContent = "Todavía no hay imágenes en la biblioteca.";
+    adLibraryList.append(empty);
+    return;
   }
+  for (const media of mediaItems) {
+    const button = document.createElement("button");
+    button.className = "ad-library-item";
+    button.type = "button";
+    button.setAttribute("aria-pressed", String(String(media.id) === adLibraryImage.value));
+    button.classList.toggle("is-selected", String(media.id) === adLibraryImage.value);
+    button.addEventListener("click", () => selectAdMedia(media));
+    const image = document.createElement("img");
+    image.src = media.storage_path;
+    image.alt = "";
+    image.loading = "lazy";
+    const filename = document.createElement("span");
+    filename.textContent = media.original_filename;
+    button.append(image, filename);
+    adLibraryList.append(button);
+  }
+}
+
+function selectAdMedia(media) {
+  adLibraryImage.value = String(media.id);
+  adImagePath.value = media.storage_path;
+  document.querySelector("#ad-alt-text").value = media.alt_text || "";
+  populateAdMedia();
+  updateAdImagePreview();
 }
 
 function updateAdImagePreview() {
   if (!adImagePath.value.trim()) {
     adImagePreview.hidden = true;
     adImagePreview.removeAttribute("src");
+    adImagePreview.classList.remove("ad-image-preview-vertical", "ad-image-preview-horizontal");
     return;
   }
   adImagePreview.src = adImagePath.value.trim();
   adImagePreview.alt = document.querySelector("#ad-alt-text").value.trim();
+  const placement = document.querySelector("#ad-placement").value;
   adImagePreview.classList.toggle(
     "ad-image-preview-vertical",
-    document.querySelector("#ad-placement").value === "article_sidebar",
+    placement === "article_sidebar",
   );
+  adImagePreview.classList.toggle("ad-image-preview-horizontal", placement !== "article_sidebar");
   adImagePreview.hidden = false;
 }
 
 function updateAdPlacementHelp() {
-  const isVertical = document.querySelector("#ad-placement").value === "article_sidebar";
-  document.querySelector("#ad-image-help").textContent = isVertical
+  const placement = document.querySelector("#ad-placement").value;
+  const help = placement === "article_sidebar"
     ? "Banner vertical: proporción recomendada 3:5 (por ejemplo, 600 × 1000 px). JPG, PNG, WebP o GIF; máximo 5 MB."
-    : "Banner horizontal: proporción aproximada 7,6:1 (por ejemplo, 1144 × 150 px). JPG, PNG, WebP o GIF; máximo 5 MB.";
+    : "Banner horizontal: misma proporción que la imagen de redes sociales, 2676 × 604 px (aprox. 4,43:1). JPG, PNG, WebP o GIF; máximo 5 MB.";
+  document.querySelector("#ad-image-help").textContent = help;
   updateAdImagePreview();
 }
 
@@ -334,9 +360,9 @@ function openAdEditor(ad = null) {
   document.querySelector("#ad-starts-at").value = ad ? toLocalInputValue(ad.starts_at) : toLocalInputValue(new Date());
   document.querySelector("#ad-ends-at").value = toLocalInputValue(ad?.ends_at);
   document.querySelector("#ad-active").checked = ad ? Boolean(ad.is_active) : true;
-  adLibraryImage.value = mediaItems.some((media) => media.storage_path === ad?.image_path)
-    ? String(mediaItems.find((media) => media.storage_path === ad.image_path).id)
-    : "";
+  const selectedMedia = mediaItems.find((media) => media.storage_path === ad?.image_path);
+  adLibraryImage.value = selectedMedia ? String(selectedMedia.id) : "";
+  populateAdMedia();
   updateAdPlacementHelp();
   adEditorPanel.hidden = false;
   adEditorPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -924,13 +950,6 @@ adForm.addEventListener("submit", saveAd);
 document.querySelector("#ad-placement").addEventListener("change", updateAdPlacementHelp);
 adImagePath.addEventListener("input", updateAdImagePreview);
 document.querySelector("#ad-alt-text").addEventListener("input", updateAdImagePreview);
-adLibraryImage.addEventListener("change", () => {
-  const selectedMedia = mediaItems.find((item) => String(item.id) === adLibraryImage.value);
-  if (!selectedMedia) return;
-  adImagePath.value = selectedMedia.storage_path;
-  document.querySelector("#ad-alt-text").value = selectedMedia.alt_text || "";
-  updateAdImagePreview();
-});
 document.querySelector("#upload-ad-image-button").addEventListener("click", () => adImageFileInput.click());
 adImageFileInput.addEventListener("change", async () => {
   const file = adImageFileInput.files?.[0];
@@ -945,7 +964,7 @@ adImageFileInput.addEventListener("change", async () => {
     mediaItems.unshift(result.media);
     populateMedia(mediaItems);
     adLibraryImage.value = String(result.media.id);
-    adImagePath.value = result.media.storage_path;
+    selectAdMedia(result.media);
     if (!document.querySelector("#ad-alt-text").value.trim()) {
       document.querySelector("#ad-alt-text").value = result.media.alt_text || "";
     }

@@ -556,7 +556,7 @@ let publicAds = [];
 
 function makeAdBanner(ad) {
   const slot = document.createElement("aside");
-  slot.className = `public-ad-banner${ad.placement === "article_sidebar" ? " public-ad-banner-vertical" : ""}`;
+  slot.className = `public-ad-banner${ad.placement === "article_sidebar" ? " public-ad-banner-vertical" : " public-ad-banner-horizontal"}`;
   slot.setAttribute("aria-label", "Publicidad");
   const label = document.createElement("span");
   label.className = "ad-label";
