@@ -624,21 +624,10 @@ function renderHomeAds() {
   slot.hidden = homeAds.length === 0 || Boolean(articleSlug || category || searchTerm || latestView || featuredView);
 }
 
-const desktopHomeAdMedia = window.matchMedia("(min-width: 701px)");
-
 function positionHomeAdSlot(slot) {
-  const homeView = document.querySelector(".home-view");
   const hero = document.querySelector("#home-hero");
-  if (desktopHomeAdMedia.matches) {
-    hero.after(slot);
-  } else {
-    homeView.after(slot);
-  }
+  hero.after(slot);
 }
-
-window.addEventListener("resize", () => {
-  positionHomeAdSlot(document.querySelector("#home-ad-slot"));
-});
 
 function renderCategoryAds() {
   const slot = document.querySelector("#category-ad-slot");
